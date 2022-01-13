@@ -1,11 +1,11 @@
 package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
+import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import static com.github.rguliamov.dreamtrip.app.model.infra.util.CommonUtils.*;
+
+import java.util.*;
 
 /**
  * @author Guliamov Rustam
@@ -32,17 +32,38 @@ public class City extends AbstractEntity {
      */
     private Set<Station> stations;
 
+    public City(String name) {
+        this.name = name;
+    }
+
     /**
      * Adds specify station to the city station set
+     * lazy initialization used
      *
-     * @param station
+     * @param transportType
      */
-    public void addStation(Station station) {
-        Objects.requireNonNull(station);
+    public Station addStation(TransportType transportType) {
+        Objects.requireNonNull(transportType, "stationType not be null");
         if(stations == null) {
             stations = new HashSet<>();
         }
+        Station station = new Station(this, transportType);
         stations.add(station);
+
+        return station;
+    }
+
+    /**
+     * Remove specify station from the city station set
+     *
+     * @param station
+     */
+    public void removeStation(Station station) {
+        Objects.requireNonNull(station, "station not be null");
+        if(stations == null) {
+            return;
+        }
+        stations.remove(station);
     }
 
     public String getName() {
@@ -70,10 +91,6 @@ public class City extends AbstractEntity {
     }
 
     public Set<Station> getStations() {
-        return stations;
-    }
-
-    public void setStations(Set<Station> stations) {
-        this.stations = stations;
+        return getSafeSet(stations);
     }
 }

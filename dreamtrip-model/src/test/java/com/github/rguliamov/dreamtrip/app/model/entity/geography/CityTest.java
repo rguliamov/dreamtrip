@@ -1,5 +1,6 @@
 package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
+import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,27 +13,36 @@ import static org.junit.jupiter.api.Assertions.*;
  * contatins unit-tests to check functionalty of {@link City} class
  */
 class CityTest {
-    static Station station;
-    static City city;
-
-    @BeforeAll
-    static void setup1() {
-        station = new Station();
-    }
+    City city;
+    Station station;
+    TransportType testType = TransportType.AUTO;
 
     @BeforeEach
     void setup2() {
-        city = new City();
+        city = new City("St. Petersburg");
     }
 
     @Test
-    void addValidStationSuccess() {
-        city.addStation(station);
+    void testAddValidStationSuccess() {
+        station = city.addStation(testType);
         assertTrue(city.getStations().contains(station));
     }
 
     @Test
-    void addNullStationFail() {
+    void testAddNullStationFail() {
         assertThrows(NullPointerException.class, () -> city.addStation(null));
+    }
+
+    @Test
+    void testRemoveStationSuccess() {
+        Station station = city.addStation(testType);
+        city.removeStation(station);
+
+        assertEquals(city.getStations().size(), 0);
+    }
+
+    @Test
+    void testRemoveNullStationFail() {
+        assertThrows(NullPointerException.class, () -> city.removeStation(null));
     }
 }

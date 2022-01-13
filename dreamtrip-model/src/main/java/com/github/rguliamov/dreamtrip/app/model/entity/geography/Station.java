@@ -3,6 +3,8 @@ package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 
+import java.util.Objects;
+
 /**
  * @author Guliamov Rustam
  *
@@ -22,6 +24,18 @@ public class Station extends AbstractEntity {
     private Coordinate coordinate;
 
     private TransportType stationType;
+
+    /**
+     * You shouldn't create {@link Station} object directly.
+     * Use {@link City} functionality instead.
+     *
+     * @param city
+     * @param stationType
+     */
+    public Station(final City city, final TransportType stationType) {
+        this.city = Objects.requireNonNull(city);
+        this.stationType = Objects.requireNonNull(stationType);
+    }
 
     public City getCity() {
         return city;
