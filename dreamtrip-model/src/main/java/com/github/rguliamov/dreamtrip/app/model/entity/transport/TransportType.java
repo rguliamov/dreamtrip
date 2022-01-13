@@ -1,4 +1,4 @@
-package com.github.rguliamov.dreamtrip.app.model.entity.geography;
+package com.github.rguliamov.dreamtrip.app.model.entity.transport;
 
 /**
  * @author Guliamov Rustam

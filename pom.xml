@@ -6,7 +6,7 @@
 
   <groupId>com.github.rguliamov</groupId>
   <artifactId>dreamtrip</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
+      <artifactId>junit-jupiter-engine</artifactId>
       <version>5.8.2</version>
     </dependency>
   </dependencies>
