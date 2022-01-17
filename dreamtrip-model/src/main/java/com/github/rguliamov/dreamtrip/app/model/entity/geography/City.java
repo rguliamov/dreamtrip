@@ -3,7 +3,7 @@ package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 
-import static com.github.rguliamov.dreamtrip.app.model.infra.util.CommonUtils.*;
+import static com.github.rguliamov.dreamtrip.app.infra.util.CommonUtils.*;
 
 import java.util.*;
 

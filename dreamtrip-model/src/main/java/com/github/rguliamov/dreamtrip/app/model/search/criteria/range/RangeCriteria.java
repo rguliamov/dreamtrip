@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 public class RangeCriteria {
     /**
      * Page index(0-base)
+     *
      */
     private final int page;
 

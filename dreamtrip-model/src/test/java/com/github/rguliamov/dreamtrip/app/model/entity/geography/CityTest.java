@@ -23,6 +23,11 @@ class CityTest {
     }
 
     @Test
+    void testNoDataReturnedAtStart() {
+        assertTrue(city.getStations().isEmpty());
+    }
+
+    @Test
     void testAddValidStationSuccess() {
         station = city.addStation(testType);
         assertTrue(city.getStations().contains(station));
