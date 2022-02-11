@@ -11,6 +11,7 @@
 
   <modules>
     <module>dreamtrip-model</module>
+    <module>dreamtrip-service</module>
   </modules>
 
   <dependencies>
