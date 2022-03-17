@@ -1,8 +1,7 @@
-package com.github.rgulyamov.dreamtrip.app.service.impl.impl;
+package com.github.rgulyamov.dreamtrip.app.service.impl;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
-import com.github.rguliamov.dreamtrip.app.service.GeographicService;
-import com.github.rguliamov.dreamtrip.app.service.impl.GeographicServiceImpl;
+import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

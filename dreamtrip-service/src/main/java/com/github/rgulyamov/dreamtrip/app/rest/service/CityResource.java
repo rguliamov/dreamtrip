@@ -18,12 +18,13 @@ import java.util.List;
 @Path("/cities")
 @Produces(MediaType.APPLICATION_JSON)
 public class CityResource {
-    List<City> cityList = new ArrayList<>();
+    List<String> cityList = new ArrayList<>();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<City> findCity() {
-        cityList.add(new City("St. Petersburg"));
+    public List<String> findCity() {
+        cityList.add("St. Petersburg");
+        cityList.add("Moscow");
         return cityList;
     }
 }

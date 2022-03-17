@@ -1,7 +1,7 @@
 package com.github.rgulyamov.dreamtrip.app.service.impl;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
-import com.github.rguliamov.dreamtrip.app.service.GeographicService;
+import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 
 import java.util.ArrayList;
 import java.util.List;
