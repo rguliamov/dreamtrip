@@ -67,15 +67,17 @@ public class ReflectionUtil {
      * @param fieldsList
      */
     public static void copyFields(Object dest, Object src, List<String> fieldsList) {
+
+
         try {
             for(String fieldName: fieldsList) {
-                Field srcField = src.getClass().getField(fieldName);
+                Field srcField = src.getClass().getDeclaredField(fieldName);
 
                 if(srcField == null)
                     continue;
                 srcField.setAccessible(true);
 
-                Field dstField = dest.getClass().getField(fieldName);
+                Field dstField = dest.getClass().getDeclaredField(fieldName);
                 if(dstField == null)
                     continue;
                 dstField.setAccessible(true);

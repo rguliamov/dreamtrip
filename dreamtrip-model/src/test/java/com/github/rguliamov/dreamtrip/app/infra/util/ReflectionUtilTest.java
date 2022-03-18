@@ -4,7 +4,6 @@ import com.github.rguliamov.dreamtrip.app.infra.util.exception.ConfigurationExce
 import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.A;
 import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.B;
 import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.C;
-import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,7 +20,7 @@ class ReflectionUtilTest {
     public void testCreateInstanceSuccess() {
         A aInstance = ReflectionUtil.createInstance(A.class);
         assertTrue(aInstance != null);
-        assertEquals(aInstance.id, 1);
+        assertEquals(aInstance.getId(), 1);
     }
 
     @Test
@@ -33,7 +32,7 @@ class ReflectionUtilTest {
     @Test
     public void testCreateInstanceWithClassWithoutDefaultConstructorFailure() {
         assertThrows(ConfigurationException.class, () ->
-                ReflectionUtil.createInstance(B.class));
+                ReflectionUtil.createInstance(C.class));
     }
 
     @Test
@@ -51,10 +50,49 @@ class ReflectionUtilTest {
                 () -> ReflectionUtil.findSimilarFields(null, A.class));
     }
 
-    @Test void testFindSimilarFieldsReturnsEmptyList() {
+    @Test
+    public void testFindSimilarFieldsReturnsEmptyList() {
         List<String> fieldsList = ReflectionUtil.findSimilarFields(A.class, C.class);
 
         assertTrue(fieldsList.isEmpty());
     }
 
+    @Test
+    public void testCopyFieldsSuccess() {
+        A a = new A(1, "Rustam", 10, 1L);
+        List<String> familiarFields = ReflectionUtil.findSimilarFields(A.class, B.class);
+        B b = new B();
+        ReflectionUtil.copyFields(b, a, familiarFields);
+
+        assertEquals(b.getAge(), a.getAge());
+        assertEquals(b.getName(), a.getName());
+        assertEquals(b.getId(), a.getId());
+    }
+
+    @Test
+    public void testCopyFieldsWithNullParameter1Failure() {
+        A a = null;
+        List<String> familiarFields = ReflectionUtil.findSimilarFields(A.class, B.class);
+        B b = new B();
+        assertThrows(NullPointerException.class, () ->
+                ReflectionUtil.copyFields(b, a, familiarFields));
+    }
+
+    @Test
+    public void testCopyFieldsWithNullParameter2Failure() {
+        A a = new A(1, "Rustam", 10, 1L);
+        List<String> familiarFields = ReflectionUtil.findSimilarFields(A.class, B.class);
+        B b = null;
+        assertThrows(NullPointerException.class, () ->
+                ReflectionUtil.copyFields(b, a, familiarFields));
+    }
+
+    @Test
+    public void testCopyFieldsWithNullParameter3Failure() {
+        A a = new A(1, "Rustam", 10, 1L);
+        List<String> familiarFields = null;
+        B b = new B();
+        assertThrows(NullPointerException.class, () ->
+                ReflectionUtil.copyFields(b, a, familiarFields));
+    }
 }

@@ -8,7 +8,7 @@ public class A {
 
     private String name;
 
-    public int id;
+    private int id;
 
     private long serialUID;
 
@@ -20,6 +20,38 @@ public class A {
         this.age = age;
         this.name = name;
         this.id = id;
+        this.serialUID = serialUID;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public long getSerialUID() {
+        return serialUID;
+    }
+
+    public void setSerialUID(long serialUID) {
         this.serialUID = serialUID;
     }
 }
