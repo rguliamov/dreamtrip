@@ -2,3 +2,4 @@ pom.xml.versionsBackup
 /.idea/
 target
 /src/main/java/com/github/rguliamov/Test2.java
+log4j.log

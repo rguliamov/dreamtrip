@@ -1,9 +1,14 @@
 package com.github.rgulyamov.dreamtrip.app.dto.transform.impl;
 
+import com.github.rguliamov.dreamtrip.app.infra.util.CommonUtils;
 import com.github.rguliamov.dreamtrip.app.infra.util.ReflectionUtil;
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rgulyamov.dreamtrip.app.dto.entity.base.BaseDTO;
 import com.github.rgulyamov.dreamtrip.app.dto.transform.Transformer;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +19,8 @@ import java.util.Objects;
  * @author Guliamov Rustam
  */
 public class TransformerImpl implements Transformer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransformerImpl.class);
+
     @Override
     public <T extends AbstractEntity, P extends BaseDTO<T>> P transform(T entity, Class<P> clazz) {
         Objects.requireNonNull(entity, "source object is not initialised");
@@ -21,9 +28,12 @@ public class TransformerImpl implements Transformer {
 
         P dto = ReflectionUtil.createInstance(clazz);
         List<String> familiarFields = ReflectionUtil.findSimilarFields(entity.getClass(), clazz);
-        //System.out.println(familiarFields);
         ReflectionUtil.copyFields(dto, entity, familiarFields);
         dto.transform(entity);
+
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("TransformerImpl.transform: {}", CommonUtils.toString(dto));
+        }
 
         return dto;
     }
@@ -37,6 +47,10 @@ public class TransformerImpl implements Transformer {
         List<String> familiarFields = ReflectionUtil.findSimilarFields(dto.getClass(), clazz);
         ReflectionUtil.copyFields(dto, entity, familiarFields);
         dto.unTransform(entity);
+
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("TransformerImpl.unTransform: {}", CommonUtils.toString(entity));
+        }
 
         return entity;
     }
