@@ -25,6 +25,10 @@ public class StationCriteria {
         this.cityName = cityName;
     }
 
+    public StationCriteria(TransportType transportType) {
+        this.transportType = transportType;
+    }
+
     public StationCriteria() {
     }
 

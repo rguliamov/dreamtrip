@@ -2,6 +2,8 @@ package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
+import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -35,6 +37,33 @@ public class Station extends AbstractEntity {
     public Station(final City city, final TransportType stationType) {
         this.city = Objects.requireNonNull(city);
         this.stationType = Objects.requireNonNull(stationType);
+    }
+
+    /**
+     * Verifies if current station matches specified criteria
+     *
+     * @param criteria
+     * @return
+     */
+    public boolean match(StationCriteria criteria) {
+        Objects.requireNonNull(criteria, "criteria isn't initialization");
+
+        if(!StringUtils.isEmpty(criteria.getCityName())) {
+            if (!criteria.getCityName().equals(this.getCity().getName()))
+                return false;
+        }
+
+        if(criteria.getTransportType() != null) {
+            if(!criteria.getTransportType().equals(this.getStationType()))
+                return false;
+        }
+
+        if(!StringUtils.isEmpty(criteria.getAddress())) {
+            if(!criteria.getAddress().equals(this.getAddress()))
+                return false;
+        }
+
+        return true;
     }
 
     public City getCity() {
@@ -75,6 +104,20 @@ public class Station extends AbstractEntity {
 
     public void setStationType(TransportType stationType) {
         this.stationType = stationType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Station station = (Station) o;
+        return Objects.equals(city, station.city) && Objects.equals(address, station.address) && stationType == station.stationType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), city, address, stationType);
     }
 
     @Override

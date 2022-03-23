@@ -1,12 +1,15 @@
 package com.github.rgulyamov.dreamtrip.app.rest.service;
 
+import com.github.rgulyamov.dreamtrip.app.dto.entity.CityDTO;
 import com.github.rgulyamov.dreamtrip.app.rest.service.conf.JerseyConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 /**
  * {@link CityResourceTest} is integration test that verifies {@link CityResource}
@@ -21,9 +24,44 @@ public class CityResourceTest extends JerseyTest {
 
     @Test
     public void testFindCitySuccess() {
-        List<?> cityLit = target("cities").request().get(List.class);
-        assertNotNull(cityLit);
-        assertTrue(cityLit.contains("St. Petersburg"));
-        assertTrue(cityLit.contains("Moscow"));
+        List<Map<String, String>> cityList = target("cities").request().get(List.class);
+        assertNotNull(cityList);
+        assertEquals(cityList.size(), 1);
+
+        Map<String, String> city = cityList.get(0);
+        assertEquals(city.get("name"), "Magnitogorsk");
+    }
+
+    @Test
+    public void testFindCityByIdSuccess() {
+        CityDTO dto = target("cities/1").request().get(CityDTO.class);
+
+        assertNotNull(dto);
+        assertEquals(dto.getName(), "Magnitogorsk");
+        assertEquals(dto.getId(), 1);
+    }
+
+    @Test
+    public void testFindCityByIdNotFound() {
+        Response response = target("/cities/2").request().get();
+
+        assertNotNull(response);
+        assertEquals(response.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void testFindCityByIdInvalidParameter() {
+        Response response = target("/cities/hi").request().get();
+
+        assertNotNull(response);
+        assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    public void testSaveCitySuccess() {
+        CityDTO dto = new CityDTO();
+        dto.setName("Magnitogorsk");
+
+
     }
 }

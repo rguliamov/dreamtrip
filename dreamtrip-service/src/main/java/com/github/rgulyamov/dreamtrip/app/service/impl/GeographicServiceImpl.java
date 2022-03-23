@@ -8,6 +8,7 @@ import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,22 +57,15 @@ public class GeographicServiceImpl implements GeographicService {
 
     @Override
     public List<Station> searchStation(final StationCriteria stationCriteria, final RangeCriteria rangeCriteria) {
-        //all cities matching the condition
-        Stream<City> cityStream = cities.stream().filter(
-                (city) -> StringUtils.isEmpty(stationCriteria.getCityName())
-                        || city.getName().equals(stationCriteria.getCityName()));
-
-        //get list of stations matching criteria
         Set<Station> stationSet = new HashSet<>();
-        cityStream.map((city) -> city.getStations())
-                .forEach((stations1) -> stationSet.addAll(stations1));
 
-        if(stationSet.isEmpty())
-            return Collections.emptyList();
+        for(City city: cities) {
+            stationSet.addAll(city.getStations());
+        }
 
-        return stationSet.stream()
-                .filter(station -> stationCriteria.getTransportType() == null
-                        || station.getStationType().equals(stationCriteria.getTransportType()))
+        return stationSet
+                .stream()
+                .filter(station -> station.match(stationCriteria))
                 .collect(Collectors.toList());
     }
 }
