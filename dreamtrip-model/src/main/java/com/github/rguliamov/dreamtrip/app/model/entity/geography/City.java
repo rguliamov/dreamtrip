@@ -56,6 +56,16 @@ public class City extends AbstractEntity {
         return station;
     }
 
+    public Station addStation(Station station) {
+        Objects.requireNonNull(station, "Station not be null");
+        if(stations == null) {
+            stations = new HashSet<>();
+        }
+        stations.add(station);
+
+        return station;
+    }
+
     /**
      * Remove specify station from the city station set
      *

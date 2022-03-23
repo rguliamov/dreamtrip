@@ -76,4 +76,14 @@ public class Station extends AbstractEntity {
     public void setStationType(TransportType stationType) {
         this.stationType = stationType;
     }
+
+    @Override
+    public String toString() {
+        return "Station{" +
+                "city=" + city.getName() +
+                ", address=" + address +
+                ", phone='" + phone + '\'' +
+                ", stationType=" + stationType +
+                '}';
+    }
 }

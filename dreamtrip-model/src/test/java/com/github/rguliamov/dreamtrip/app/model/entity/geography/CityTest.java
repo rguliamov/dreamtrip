@@ -35,7 +35,7 @@ class CityTest {
 
     @Test
     void testAddNullStationFail() {
-        assertThrows(NullPointerException.class, () -> city.addStation(null));
+        assertThrows(NullPointerException.class, () -> city.addStation((TransportType) null));
     }
 
     @Test
