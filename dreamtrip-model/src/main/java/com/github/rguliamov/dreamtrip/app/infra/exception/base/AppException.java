@@ -1,4 +1,4 @@
-package com.github.rguliamov.dreamtrip.app.infra.util.exception.base;
+package com.github.rguliamov.dreamtrip.app.infra.exception.base;
 
 /**
  * Base application-specific exception

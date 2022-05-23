@@ -2,11 +2,15 @@ package com.github.rgulyamov.dreamtrip.app.rest.service;
 
 import com.github.rgulyamov.dreamtrip.app.dto.entity.CityDTO;
 import com.github.rgulyamov.dreamtrip.app.rest.service.conf.JerseyConfig;
+import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
+import com.github.rgulyamov.dreamtrip.app.service.impl.GeographicServiceImpl;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +64,9 @@ public class CityResourceTest extends JerseyTest {
     @Test
     public void testSaveCitySuccess() {
         CityDTO dto = new CityDTO();
-        dto.setName("Magnitogorsk");
+        dto.setName("Kiev");
 
-
+        Response response = target("cities/add").request().post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(response.getStatus(), Response.Status.NO_CONTENT.getStatusCode());
     }
 }

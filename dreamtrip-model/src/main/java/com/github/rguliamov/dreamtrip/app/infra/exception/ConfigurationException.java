@@ -1,6 +1,6 @@
-package com.github.rguliamov.dreamtrip.app.infra.util.exception;
+package com.github.rguliamov.dreamtrip.app.infra.exception;
 
-import com.github.rguliamov.dreamtrip.app.infra.util.exception.base.AppException;
+import com.github.rguliamov.dreamtrip.app.infra.exception.base.AppException;
 
 /**
  * Signals about incorrect configuration settings/parameters

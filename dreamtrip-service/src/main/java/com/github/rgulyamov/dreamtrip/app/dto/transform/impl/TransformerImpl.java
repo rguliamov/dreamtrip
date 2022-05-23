@@ -45,7 +45,7 @@ public class TransformerImpl implements Transformer {
 
         T entity = ReflectionUtil.createInstance(clazz);
         List<String> familiarFields = ReflectionUtil.findSimilarFields(dto.getClass(), clazz);
-        ReflectionUtil.copyFields(dto, entity, familiarFields);
+        ReflectionUtil.copyFields(entity, dto, familiarFields);
         dto.unTransform(entity);
 
         if(LOGGER.isDebugEnabled()) {

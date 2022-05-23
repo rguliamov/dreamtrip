@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 /**
  * REST web service that handles city-related requests
  *
@@ -29,7 +28,7 @@ public class CityResource extends BaseResource {
     /**
      * Source of data
      */
-    private final GeographicService service;
+    private final GeographicService service = new GeographicServiceImpl();
 
     /**
      * DTO <-> Entity Transformer
@@ -37,7 +36,7 @@ public class CityResource extends BaseResource {
     private final Transformer transformer;
 
     public CityResource() {
-        service = new GeographicServiceImpl();
+        //service = new GeographicServiceImpl();
         transformer = new TransformerImpl();
 
         City city = new City("Magnitogorsk");
@@ -63,13 +62,14 @@ public class CityResource extends BaseResource {
      * save new instance city
      */
     @POST
+    @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     public void saveCity(CityDTO cityDTO) {
         service.saveCity(transformer.unTransform(cityDTO, City.class));
     }
 
     /**
-     * return ccity with specified identifier
+     * return city with specified identifier
      *
      * @return
      */

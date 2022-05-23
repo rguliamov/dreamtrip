@@ -1,12 +1,19 @@
 package com.github.rguliamov.dreamtrip.app.infra.util;
 
-import com.github.rguliamov.dreamtrip.app.infra.util.exception.ConfigurationException;
+import com.github.rguliamov.dreamtrip.app.infra.exception.ConfigurationException;
 import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.A;
 import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.B;
 import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.C;
+import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
+import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
+import com.github.rguliamov.dreamtrip.app.model.entity.geography.Coordinate;
+import com.github.rguliamov.dreamtrip.app.model.entity.person.Account;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -94,5 +101,37 @@ class ReflectionUtilTest {
         B b = new B();
         assertThrows(NullPointerException.class, () ->
                 ReflectionUtil.copyFields(b, a, familiarFields));
+    }
+
+    @Test
+    public void testGetFieldsSuccess() {
+        List<String> sumFields = convert(ReflectionUtil.getFields(City.class));
+
+        List<String> cityFields = convert(Arrays.asList(City.class.getDeclaredFields()));
+        List<String> abstractEntityFields = convert(Arrays.asList(AbstractEntity.class.getDeclaredFields()));
+
+        System.out.println(sumFields);
+        System.out.println(cityFields);
+        System.out.println(abstractEntityFields);
+
+        boolean flag = true;
+        assertTrue(cityFields.stream().allMatch(t -> sumFields.contains(t)) && abstractEntityFields.stream().allMatch(t -> sumFields.contains(t)));
+
+
+    }
+
+    @Test
+    void testFindFieldSuccess() {
+        Field field = ReflectionUtil.getField(Coordinate.class, "x");
+        assertEquals(field.getName(), "x");
+    }
+
+    @Test
+    void testFindFieldNotFoundThrowsConfigurationException() {
+        assertThrows(ConfigurationException.class, () -> ReflectionUtil.getField(Coordinate.class, "name"));
+    }
+
+    private static List<String> convert(List<Field> fields) {
+        return fields.stream().map(f -> f.getName()).collect(Collectors.toList());
     }
 }

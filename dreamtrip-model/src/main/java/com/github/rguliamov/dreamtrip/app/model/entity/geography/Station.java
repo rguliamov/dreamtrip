@@ -4,7 +4,7 @@ import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
 import org.apache.commons.lang3.StringUtils;
-
+    
 import java.util.Objects;
 
 /**
