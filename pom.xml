@@ -13,6 +13,7 @@
     <module>dreamtrip-model</module>
     <module>dreamtrip-service</module>
     <module>dreamtrip-presentation</module>
+    <module>dreamtrip-persistence</module>
   </modules>
 
   <dependencies>

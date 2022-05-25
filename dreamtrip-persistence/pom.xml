@@ -9,16 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dreamtrip-model</artifactId>
+    <artifactId>dreamtrip-persistence</artifactId>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
         <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.0.1.Final</version>
+            <groupId>com.github.rguliamov</groupId>
+            <artifactId>dreamtrip-model</artifactId>
+            <version>0.1.1</version>
         </dependency>
-
     </dependencies>
 
 </project>
