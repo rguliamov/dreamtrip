@@ -5,17 +5,11 @@ import com.github.rguliamov.dreamtrip.app.model.entity.geography.Station;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.range.RangeCriteria;
 import com.github.rguliamov.dreamtrip.app.repository.CityRepository;
-import com.github.rguliamov.dreamtrip.app.repository.inmemory.InMemoryCityRepository;
 import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.github.rguliamov.dreamtrip.app.infra.util.CommonUtils.*;
 
 /**
  * @author Guliamov Rustam
