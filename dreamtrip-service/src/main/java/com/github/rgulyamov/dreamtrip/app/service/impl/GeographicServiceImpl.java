@@ -4,9 +4,12 @@ import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.Station;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.range.RangeCriteria;
+import com.github.rguliamov.dreamtrip.app.repository.CityRepository;
+import com.github.rguliamov.dreamtrip.app.repository.inmemory.InMemoryCityRepository;
 import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.inject.Inject;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,51 +23,35 @@ import static com.github.rguliamov.dreamtrip.app.infra.util.CommonUtils.*;
  * default implimentation of the {@link GeographicService} interface
  */
 public class GeographicServiceImpl implements GeographicService {
-    /**
-     * List of cities
-     */
-    private List<City> cities;
+    CityRepository repository;
 
-    /**
-     * auto increment for entity id generation
-     */
-    private int incr = 0;
-
-    public GeographicServiceImpl() {
-        cities = new ArrayList<>();
+    @Inject
+    public GeographicServiceImpl(CityRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public List<City> findCities() {
-        return getSafeList(cities);
+        return repository.findAll();
     }
 
     @Override
     public void saveCity(City city) {
         Objects.requireNonNull(city, "city object not be null");
-        if(!cities.contains(city)) {
-            city.setId(++incr);
-            cities.add(city);
-        }
+        repository.save(city);
     }
 
     @Override
     public Optional<City> findCityById(final int id) {
-        return cities.stream()
-                .filter(city -> city.getId() == id)
-                .findFirst();
+        return Optional.ofNullable(repository.findById(id));
     }
 
     @Override
     public List<Station> searchStation(final StationCriteria stationCriteria, final RangeCriteria rangeCriteria) {
         Set<Station> stationSet = new HashSet<>();
 
-        for(City city: cities) {
-            stationSet.addAll(city.getStations());
-        }
-
-        return stationSet
-                .stream()
+        return repository.findAll().stream()
+                .flatMap(city -> city.getStations().stream())
                 .filter(station -> station.match(stationCriteria))
                 .collect(Collectors.toList());
     }

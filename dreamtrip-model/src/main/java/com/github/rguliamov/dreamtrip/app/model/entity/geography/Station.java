@@ -3,6 +3,7 @@ package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
     
 import java.util.Objects;
@@ -13,18 +14,27 @@ import java.util.Objects;
  * Station where passengers can get off or take specific kind
  * of transport. Multiple stationts compose route of the trip
  */
+@Entity
+@Table(name = "STATIONS")
 public class Station extends AbstractEntity {
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
+    @JoinColumn(name = "CITY_ID")
     private City city;
 
+    @Embedded
     private Address address;
 
     /**
      * (Optional) Phone of the station
      */
+    @Column(name = "PHONE", length = 16)
     private String phone;
 
+    @Embedded
     private Coordinate coordinate;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "TRANSPORT_TYPE", nullable = false)
     private TransportType stationType;
 
     /**
@@ -37,6 +47,10 @@ public class Station extends AbstractEntity {
     public Station(final City city, final TransportType stationType) {
         this.city = Objects.requireNonNull(city);
         this.stationType = Objects.requireNonNull(stationType);
+    }
+
+    @Deprecated
+    protected Station() {
     }
 
     /**

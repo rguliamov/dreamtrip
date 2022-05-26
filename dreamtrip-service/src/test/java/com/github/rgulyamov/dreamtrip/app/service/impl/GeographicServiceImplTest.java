@@ -5,6 +5,7 @@ import com.github.rguliamov.dreamtrip.app.model.entity.geography.Station;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.range.RangeCriteria;
+import com.github.rguliamov.dreamtrip.app.repository.inmemory.InMemoryCityRepository;
 import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class GeographicServiceImplTest {
 
     @BeforeEach
     void setup() {
-        geographicService = new GeographicServiceImpl();
+        geographicService = new GeographicServiceImpl(new InMemoryCityRepository());
     }
 
     @Test

@@ -26,7 +26,9 @@ public class ReflectionUtil {
 
     public static <T> T createInstance(Class<T> clazz) {
         try {
-            Constructor<T> constructor = clazz.getConstructor();
+            //creation with protected constructor
+            Constructor<T> constructor = clazz.getDeclaredConstructor();
+            constructor.setAccessible(true);
             T object = constructor.newInstance();
 
             return object;

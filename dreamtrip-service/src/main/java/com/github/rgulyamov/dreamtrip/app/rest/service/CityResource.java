@@ -10,6 +10,7 @@ import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import com.github.rgulyamov.dreamtrip.app.service.impl.GeographicServiceImpl;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,16 +29,18 @@ public class CityResource extends BaseResource {
     /**
      * Source of data
      */
-    private final GeographicService service = new GeographicServiceImpl();
+    private GeographicService service;
 
     /**
      * DTO <-> Entity Transformer
      */
-    private final Transformer transformer;
+    private Transformer transformer;
 
-    public CityResource() {
+    @Inject
+    public CityResource(GeographicService service, Transformer transformer) {
         //service = new GeographicServiceImpl();
-        transformer = new TransformerImpl();
+        this.transformer = transformer;
+        this.service = service;
 
         City city = new City("Magnitogorsk");
         city.addStation(TransportType.AVIA);

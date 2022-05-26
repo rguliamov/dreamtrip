@@ -2,6 +2,7 @@ package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
+import jakarta.persistence.*;
 
 import static com.github.rguliamov.dreamtrip.app.infra.util.CommonUtils.*;
 
@@ -12,27 +13,34 @@ import java.util.*;
  *
  * Any location that contains transport stations
  */
+@Entity
+@Table(name = "CITIES")
 public class City extends AbstractEntity {
+    @Column(name = "NAME", nullable = false, length = 32)
     private String name;
 
     /**
      * Name of the district where city is placed
      * (Область или State)
      */
+    @Column(name = "DISTRICT", nullable = false, length = 32)
     private String district;
 
     /**
      * Name of the region where district is located.
      * Region is top level area in the country
      */
+    @Column(name = "REGION", nullable = false, length = 32)
     private String region;
 
     /**
      * Set of transport stations that is linked to this city
      */
+    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Station> stations;
 
-    public City() {
+    @Deprecated
+    protected City() {
     }
 
     public City(String name) {

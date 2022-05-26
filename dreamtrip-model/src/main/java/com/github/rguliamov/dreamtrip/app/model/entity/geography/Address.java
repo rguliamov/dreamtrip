@@ -1,21 +1,33 @@
 package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
+
 /**
  * @author Guliamov Rustam
  *
  * Address of the specific office or person
  */
+@Embeddable
 public class Address {
+    @Column(name = "ZIP_CODE", length = 10)
     private String zipCode;
 
+    @Column(name = "STREET", length = 32)
     private String street;
 
+    @Column(name = "HOUSE_NO", length = 16)
     private String house;
 
     /**
      * (Optional) Apartment number if there's
      */
+    @Column(name = "APARTMENT", length = 16)
     private String apartment;
+
+    public Address() {
+    }
 
     public String getZipCode() {
         return zipCode;
