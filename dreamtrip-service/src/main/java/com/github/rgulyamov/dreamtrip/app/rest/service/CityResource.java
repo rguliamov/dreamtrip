@@ -4,10 +4,8 @@ import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 import com.github.rgulyamov.dreamtrip.app.dto.entity.CityDTO;
 import com.github.rgulyamov.dreamtrip.app.dto.transform.Transformer;
-import com.github.rgulyamov.dreamtrip.app.dto.transform.impl.TransformerImpl;
 import com.github.rgulyamov.dreamtrip.app.rest.service.base.BaseResource;
 import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
-import com.github.rgulyamov.dreamtrip.app.service.impl.GeographicServiceImpl;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.inject.Inject;
@@ -44,6 +42,8 @@ public class CityResource extends BaseResource {
 
         City city = new City("Magnitogorsk");
         city.addStation(TransportType.AVIA);
+        city.setDistrict("NONE");
+        city.setRegion("NONE");
         service.saveCity(city);
     }
 

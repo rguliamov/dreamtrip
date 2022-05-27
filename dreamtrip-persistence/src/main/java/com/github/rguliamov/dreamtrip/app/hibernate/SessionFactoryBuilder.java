@@ -1,4 +1,4 @@
-package com.github.rguliamov.dreamtrip.app.repository.hibernate;
+package com.github.rguliamov.dreamtrip.app.hibernate;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.Address;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
@@ -11,11 +11,15 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 /**
+ * Component that is responsible for managing
+ * Hibernate Session factory
+ *
  * @author Guliamov Rustam
  */
 public class SessionFactoryBuilder {
@@ -44,8 +48,14 @@ public class SessionFactoryBuilder {
         return properties;
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 
+    @PreDestroy
     public void destroy() {
-
+        if(sessionFactory != null) {
+            sessionFactory.close();
+        }
     }
 }
