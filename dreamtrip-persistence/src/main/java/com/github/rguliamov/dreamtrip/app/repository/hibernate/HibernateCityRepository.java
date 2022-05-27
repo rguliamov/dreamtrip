@@ -29,8 +29,7 @@ public class HibernateCityRepository implements CityRepository {
     public void save(City city) {
         try(Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            city.prePersist();
-            city.getStations().forEach(Station::prePersist);
+
             session.persist(city);
             transaction.commit();
         }

@@ -13,6 +13,7 @@ import java.util.Objects;
  */
 @MappedSuperclass
 public class AbstractEntity {
+    public static final String FIELD_CREATED_AT = "createdAt";
 
     /**
      * Unique entity identifier
@@ -86,13 +87,6 @@ public class AbstractEntity {
 
     public void setModifiedBy(Account modifiedBy) {
         this.modifiedBy = modifiedBy;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if(getId() == 0) {
-            setCreatedAt(LocalDateTime.now());
-        }
     }
 
     @Override

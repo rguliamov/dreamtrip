@@ -1,5 +1,6 @@
 package com.github.rguliamov.dreamtrip.app.hibernate;
 
+import com.github.rguliamov.dreamtrip.app.hibernate.interceptors.TimestampInterceptor;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.Address;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.Coordinate;
@@ -33,7 +34,10 @@ public class SessionFactoryBuilder {
         metadataSources.addAnnotatedClass(Account.class);
         metadataSources.addAnnotatedClass(Coordinate.class);
         metadataSources.addAnnotatedClass(Address.class);
-        sessionFactory = metadataSources.buildMetadata().buildSessionFactory();
+        org.hibernate.boot.SessionFactoryBuilder builder = metadataSources.getMetadataBuilder().build()
+                .getSessionFactoryBuilder().applyInterceptor(new TimestampInterceptor());
+
+        sessionFactory = builder.build();
     }
 
     private Properties loadProperties() {
