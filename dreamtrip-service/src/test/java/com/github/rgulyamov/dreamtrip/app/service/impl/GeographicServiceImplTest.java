@@ -1,11 +1,16 @@
 package com.github.rgulyamov.dreamtrip.app.service.impl;
 
+import com.github.rguliamov.dreamtrip.app.hibernate.SessionFactoryBuilder;
+import com.github.rguliamov.dreamtrip.app.model.entity.geography.Address;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.Station;
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.StationCriteria;
 import com.github.rguliamov.dreamtrip.app.model.search.criteria.range.RangeCriteria;
-import com.github.rguliamov.dreamtrip.app.repository.inmemory.InMemoryCityRepository;
+import com.github.rguliamov.dreamtrip.app.repository.CityRepository;
+import com.github.rguliamov.dreamtrip.app.repository.StationRepository;
+import com.github.rguliamov.dreamtrip.app.repository.hibernate.HibernateCityRepository;
+import com.github.rguliamov.dreamtrip.app.repository.hibernate.HibernateStationRepository;
 import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +30,10 @@ class GeographicServiceImplTest {
 
     @BeforeEach
     void setup() {
-        geographicService = new GeographicServiceImpl(new InMemoryCityRepository());
+        SessionFactoryBuilder builder = new SessionFactoryBuilder();
+        CityRepository cityRepository = new HibernateCityRepository(builder);
+        StationRepository stationRepository = new HibernateStationRepository(builder);
+        geographicService = new GeographicServiceImpl(cityRepository, stationRepository);
     }
 
     @Test
@@ -37,6 +45,8 @@ class GeographicServiceImplTest {
     @Test
     void testSaveNewCitySuccess() {
         City city = new City("St. Petersburg");
+        city.setRegion("None");
+        city.setDistrict("None");
         geographicService.saveCity(city);
 
         assertEquals(geographicService.findCities().size(), 1);
@@ -51,7 +61,11 @@ class GeographicServiceImplTest {
     @Test
     void testSearchCityByIdSuccess() {
         City city1 = new City("Magnitogorsk");
+        city1.setDistrict("None");
+        city1.setRegion("None");
         City city2 = new City("Chelyabinsk");
+        city2.setDistrict("None");
+        city2.setRegion("None");
 
         geographicService.saveCity(city1);
         geographicService.saveCity(city2);
@@ -65,6 +79,8 @@ class GeographicServiceImplTest {
     @Test
     void testSearchCityByIdNotFoundReturnEmptyOptional() {
         City city = new City("Magnitogorsk");
+        city.setRegion("None");
+        city.setDistrict("None");
         geographicService.saveCity(city);
 
         Optional<City> answer = geographicService.findCityById(2);
@@ -75,31 +91,14 @@ class GeographicServiceImplTest {
     void testSearchStationsByCitySuccess() {
         StationCriteria criteria = new StationCriteria("Magnitogorsk");
 
-        City city1 = new City("Magnitogorsk");
-        City city2 = new City("Chelyabinsk");
+        //получаем список городов со станциями
+        List<City> cities = setupCityAndStation();
 
-        Station station1 = new Station(city1, TransportType.RAILWAY);
-        Station station2 = new Station(city1, TransportType.AUTO);
-        Station station3 = new Station(city1, TransportType.AUTO);
-        Station station4 = new Station(city1, TransportType.AVIA);
-        Station station5 = new Station(city2, TransportType.RAILWAY);
-        Station station6 = new Station(city2, TransportType.AVIA);
-
-        city1.addStation(station1).setId(1);
-        city1.addStation(station2).setId(2);
-        city1.addStation(station3).setId(3);
-        city1.addStation(station4).setId(4);
-        city2.addStation(station5).setId(5);
-        city2.addStation(station6).setId(6);
-
-        geographicService.saveCity(city1);
-        geographicService.saveCity(city2);
+        //сохраняем города в БД
+        cities.forEach(city -> geographicService.saveCity(city));
 
         List<Station> stationList = geographicService.searchStation(criteria, new RangeCriteria(0, 0));
-        assertTrue(stationList.contains(station1));
-        assertTrue(stationList.contains(station2));
-        assertTrue(stationList.contains(station3));
-        assertTrue(stationList.contains(station4));
+
         assertEquals(stationList.size(), 4);
     }
 
@@ -108,13 +107,17 @@ class GeographicServiceImplTest {
         StationCriteria criteria = new StationCriteria("Magnitogorsk");
 
         City city1 = new City("Magnitogorsk");
+        city1.setDistrict("none");
+        city1.setRegion("none");
         City city2 = new City("Chelyabinsk");
+        city2.setDistrict("none");
+        city2.setRegion("none");
 
         Station station5 = new Station(city2, TransportType.RAILWAY);
         Station station6 = new Station(city2, TransportType.AVIA);
 
-        city2.addStation(station5).setId(5);
-        city2.addStation(station6).setId(6);
+        city2.addStation(station5);
+        city2.addStation(station6);
 
         geographicService.saveCity(city1);
         geographicService.saveCity(city2);
@@ -128,33 +131,13 @@ class GeographicServiceImplTest {
         StationCriteria criteria = new StationCriteria();
         criteria.setTransportType(TransportType.AVIA);
 
-        City city1 = new City("Magnitogorsk");
-        City city2 = new City("Chelyabinsk");
-        City city3 = new City("St. Petersburg");
+        List<City> cities = setupCityAndStation();
 
-        Station station1 = new Station(city1, TransportType.RAILWAY);
-        Station station2 = new Station(city1, TransportType.AUTO);
-        Station station3 = new Station(city1, TransportType.AUTO);
-        Station station4 = new Station(city1, TransportType.AVIA);
-        Station station5 = new Station(city2, TransportType.RAILWAY);
-        Station station6 = new Station(city2, TransportType.AVIA);
-
-        city1.addStation(station1).setId(1);
-        city1.addStation(station2).setId(2);
-        city2.addStation(station3).setId(3);
-        city2.addStation(station4).setId(4);
-        city3.addStation(station5).setId(5);
-        city3.addStation(station6).setId(6);
-
-        geographicService.saveCity(city1);
-        geographicService.saveCity(city2);
-        geographicService.saveCity(city3);
+        cities.forEach(city -> geographicService.saveCity(city));
 
         List<Station> stationList = geographicService.searchStation(criteria, new RangeCriteria(0, 0));
 
         assertEquals(stationList.size(), 2);
-        assertTrue(stationList.contains(station4));
-        assertTrue(stationList.contains(station6));
     }
 
     @Test
@@ -162,23 +145,13 @@ class GeographicServiceImplTest {
         StationCriteria criteria = new StationCriteria();
         criteria.setTransportType(TransportType.AVIA);
 
-        City city1 = new City("Magnitogorsk");
-        City city2 = new City("Chelyabinsk");
-        City city3 = new City("St. Petersburg");
+        City city = new City("St. Petersburg");
+        city.setDistrict("None");
+        city.setRegion("None");
+        city.addStation(new Station(city, TransportType.AUTO));
+        city.addStation(new Station(city, TransportType.RAILWAY));
 
-        Station station1 = new Station(city1, TransportType.RAILWAY);
-        Station station2 = new Station(city1, TransportType.AUTO);
-        Station station3 = new Station(city1, TransportType.AUTO);
-        Station station5 = new Station(city2, TransportType.RAILWAY);
-
-        city1.addStation(station1).setId(1);
-        city1.addStation(station2).setId(2);
-        city2.addStation(station3).setId(3);
-        city3.addStation(station5).setId(5);
-
-        geographicService.saveCity(city1);
-        geographicService.saveCity(city2);
-        geographicService.saveCity(city3);
+        geographicService.saveCity(city);
 
         List<Station> stationList = geographicService.searchStation(criteria, new RangeCriteria(0, 0));
         assertTrue(stationList.isEmpty());
@@ -188,30 +161,62 @@ class GeographicServiceImplTest {
     void testSearchStationByEmptyCriteriaReturnAllStations() {
         StationCriteria criteria = new StationCriteria();
 
-        City city1 = new City("Magnitogorsk");
-        City city2 = new City("Chelyabinsk");
-        City city3 = new City("St. Petersburg");
+        List<City> cities = setupCityAndStation();
 
-        Station station1 = new Station(city1, TransportType.RAILWAY);
-        Station station2 = new Station(city1, TransportType.AUTO);
-        Station station3 = new Station(city1, TransportType.AUTO);
-        Station station4 = new Station(city1, TransportType.AVIA);
-        Station station5 = new Station(city2, TransportType.RAILWAY);
-        Station station6 = new Station(city2, TransportType.AVIA);
-
-        city1.addStation(station1).setId(1);
-        city1.addStation(station2).setId(2);
-        city2.addStation(station3).setId(3);
-        city2.addStation(station4).setId(4);
-        city3.addStation(station5).setId(5);
-        city3.addStation(station6).setId(6);
-
-        geographicService.saveCity(city1);
-        geographicService.saveCity(city2);
-        geographicService.saveCity(city3);
+        cities.forEach(city -> geographicService.saveCity(city));
 
         List<Station> stationList = geographicService.searchStation(criteria, new RangeCriteria(0, 0));
 
+        stationList.forEach(s -> System.out.println(s.getAddress()));
+
         assertEquals(stationList.size(), 6);
+    }
+
+    public List<City> setupCityAndStation() {
+        City city1 = new City("Magnitogorsk");
+        city1.setRegion("None");
+        city1.setDistrict("None");
+        City city2 = new City("Chelyabinsk");
+        city2.setRegion("None");
+        city2.setDistrict("None");
+
+        Station station1 = new Station(city1, TransportType.RAILWAY);
+        Address address1 = new Address();
+        address1.setStreet("1");
+        station1.setAddress(address1);
+
+        Station station2 = new Station(city1, TransportType.AUTO);
+        Address address2 = new Address();
+        address2.setStreet("2");
+        station2.setAddress(address2);
+
+        Station station3 = new Station(city1, TransportType.AUTO);
+        Address address3 = new Address();
+        address3.setStreet("3");
+        station3.setAddress(address3);
+
+        Station station4 = new Station(city1, TransportType.AVIA);
+        Address address4 = new Address();
+        address4.setStreet("4");
+        station4.setAddress(address4);
+
+        Station station5 = new Station(city2, TransportType.RAILWAY);
+        Address address5 = new Address();
+        address5.setStreet("5");
+        station5.setAddress(address5);
+
+        Station station6 = new Station(city2, TransportType.AVIA);
+        Address address6 = new Address();
+        address6.setStreet("6");
+        station6.setAddress(address6);
+
+        city1.addStation(station1);
+        city1.addStation(station2);
+        city1.addStation(station3);
+        city1.addStation(station4);
+        city2.addStation(station5);
+        city2.addStation(station6);
+
+        return List.of(city1, city2);
     }
 }

@@ -2,7 +2,9 @@ package com.github.rgulyamov.dreamtrip.app.diconfig;
 
 import com.github.rguliamov.dreamtrip.app.hibernate.SessionFactoryBuilder;
 import com.github.rguliamov.dreamtrip.app.repository.CityRepository;
+import com.github.rguliamov.dreamtrip.app.repository.StationRepository;
 import com.github.rguliamov.dreamtrip.app.repository.hibernate.HibernateCityRepository;
+import com.github.rguliamov.dreamtrip.app.repository.hibernate.HibernateStationRepository;
 import com.github.rgulyamov.dreamtrip.app.dto.transform.Transformer;
 import com.github.rgulyamov.dreamtrip.app.dto.transform.impl.TransformerImpl;
 import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
@@ -23,5 +25,6 @@ public class ComponentBinder extends AbstractBinder {
         bind(GeographicServiceImpl.class).to(GeographicService.class).in(Singleton.class);
         bind(HibernateCityRepository.class).to(CityRepository.class).in(Singleton.class);
         bind(TransformerImpl.class).to(Transformer.class).in(Singleton.class);
+        bind(HibernateStationRepository.class).to(StationRepository.class).in(Singleton.class);
     }
 }

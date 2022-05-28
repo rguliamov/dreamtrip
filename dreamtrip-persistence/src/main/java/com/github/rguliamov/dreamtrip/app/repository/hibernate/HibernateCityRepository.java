@@ -15,21 +15,18 @@ import java.util.List;
  * @author Guliamov Rustam
  */
 public class HibernateCityRepository implements CityRepository {
-    private final SessionFactoryBuilder sessionFactoryBuilder;
 
     private final SessionFactory sessionFactory;
 
     @Inject
-    public HibernateCityRepository(SessionFactoryBuilder sessionFactoryBuilder) {
-        this.sessionFactoryBuilder = sessionFactoryBuilder;
-        sessionFactory = sessionFactoryBuilder.getSessionFactory();
+    public HibernateCityRepository(SessionFactoryBuilder builder) {
+        sessionFactory = builder.getSessionFactory();
     }
 
     @Override
     public void save(City city) {
         try(Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-
             session.persist(city);
             transaction.commit();
         }

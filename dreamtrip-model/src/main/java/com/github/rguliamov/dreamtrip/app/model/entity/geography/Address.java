@@ -2,7 +2,6 @@ package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 
 /**
  * @author Guliamov Rustam
@@ -59,5 +58,15 @@ public class Address {
 
     public void setApartment(String apartment) {
         this.apartment = apartment;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "zipCode='" + zipCode + '\'' +
+                ", street='" + street + '\'' +
+                ", house='" + house + '\'' +
+                ", apartment='" + apartment + '\'' +
+                '}';
     }
 }

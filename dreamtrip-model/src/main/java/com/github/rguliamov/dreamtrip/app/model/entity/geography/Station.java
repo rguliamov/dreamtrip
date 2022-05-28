@@ -17,6 +17,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "STATIONS")
 public class Station extends AbstractEntity {
+    public static final String CITY_NAME = "city";
+
+    public static final String ADDRESS = "address";
+
+    public static final String TRANSPORT_TYPE = "stationType";
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "CITY_ID")
     private City city;
@@ -59,6 +65,7 @@ public class Station extends AbstractEntity {
      * @param criteria
      * @return
      */
+    @Deprecated
     public boolean match(StationCriteria criteria) {
         Objects.requireNonNull(criteria, "criteria isn't initialization");
 
