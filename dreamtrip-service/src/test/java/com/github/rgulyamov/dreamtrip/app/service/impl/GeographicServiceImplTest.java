@@ -15,8 +15,13 @@ import com.github.rgulyamov.dreamtrip.app.service.GeographicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,13 +32,18 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class GeographicServiceImplTest {
     GeographicService geographicService;
+    StationRepository stationRepository;
+    CityRepository cityRepository;
+    SessionFactoryBuilder builder;
+    ExecutorService executorService;
 
     @BeforeEach
     void setup() {
-        SessionFactoryBuilder builder = new SessionFactoryBuilder();
-        CityRepository cityRepository = new HibernateCityRepository(builder);
-        StationRepository stationRepository = new HibernateStationRepository(builder);
+        builder = new SessionFactoryBuilder();
+        cityRepository = new HibernateCityRepository(builder);
+        stationRepository = new HibernateStationRepository(builder);
         geographicService = new GeographicServiceImpl(cityRepository, stationRepository);
+        executorService = Executors.newCachedThreadPool();
     }
 
     @Test
@@ -170,6 +180,65 @@ class GeographicServiceImplTest {
         stationList.forEach(s -> System.out.println(s.getAddress()));
 
         assertEquals(stationList.size(), 6);
+    }
+
+    @Test
+    void testSaveMultipleCitiesSuccess() {
+        int cityCount = geographicService.findCities().size();
+
+        int addedCount = 100_000;
+        for (int i = 0; i < addedCount; i++) {
+            City city = new City("Petersburg" + i);
+            city.setRegion("None");
+            city.setDistrict("None");
+            city.addStation(TransportType.AVIA);
+
+            geographicService.saveCity(city);
+        }
+
+        int size = geographicService.findCities().size();
+
+        assertEquals(cityCount + addedCount, size);
+    }
+
+    @Test
+    void testSaveMultipleCitiesConcurrentlySuccess() {
+        int cityCount = geographicService.findCities().size();
+
+        int threadCount = 100;
+        int batchCount = 10;
+
+        List<Future<?>> futures = new ArrayList<>();
+
+        for(int i = 0; i < threadCount; i++) {
+            futures.add(executorService.submit(() -> {
+                for (int j = 0; j < batchCount; j++) {
+                    City city = new City(ThreadLocalRandom.current().nextInt(10000) + "St. Petersburg" + ThreadLocalRandom.current().nextInt(10000));
+                    city.setDistrict("None");
+                    city.setRegion("None");
+                    city.addStation(TransportType.AVIA);
+                    geographicService.saveCity(city);
+                }
+            }));
+        }
+
+        waitForFutures(futures);
+
+        assertEquals(geographicService.findCities().size(), cityCount + threadCount * batchCount);
+    }
+
+
+
+
+    //for tests
+    public void waitForFutures(List<Future<?>> futures) {
+        futures.forEach(future -> {
+            try {
+                future.get();
+            } catch (Exception e) {
+                fail(e.getMessage());
+            }
+        });
     }
 
     public List<City> setupCityAndStation() {
