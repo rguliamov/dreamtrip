@@ -1,6 +1,5 @@
 package com.github.rgulyamov.dreamtrip.app.dto.transform.impl;
 
-import com.github.rguliamov.dreamtrip.app.infra.util.CommonUtils;
 import com.github.rguliamov.dreamtrip.app.infra.util.ReflectionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

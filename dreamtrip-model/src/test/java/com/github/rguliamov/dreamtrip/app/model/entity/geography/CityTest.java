@@ -1,7 +1,6 @@
 package com.github.rguliamov.dreamtrip.app.model.entity.geography;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

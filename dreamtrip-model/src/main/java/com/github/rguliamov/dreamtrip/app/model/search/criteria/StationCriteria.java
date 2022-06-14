@@ -1,4 +1,4 @@
-    package com.github.rguliamov.dreamtrip.app.model.search.criteria;
+package com.github.rguliamov.dreamtrip.app.model.search.criteria;
 
 import com.github.rguliamov.dreamtrip.app.model.entity.transport.TransportType;
 

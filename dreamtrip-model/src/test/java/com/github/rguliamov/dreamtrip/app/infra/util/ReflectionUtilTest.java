@@ -7,7 +7,6 @@ import com.github.rguliamov.dreamtrip.app.infra.util.helperClasses.C;
 import com.github.rguliamov.dreamtrip.app.model.entity.base.AbstractEntity;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.City;
 import com.github.rguliamov.dreamtrip.app.model.entity.geography.Coordinate;
-import com.github.rguliamov.dreamtrip.app.model.entity.person.Account;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
