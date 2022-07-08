@@ -7,7 +7,7 @@ import com.github.rguliamov.dreamtrip.app.infra.exception.base.AppException;
  *
  * @author Guliamov Rustam
  */
-public class ConfigurationException extends AppException {
+public class ConfigurationException extends  AppException {
 
     private static final long serialVersionUID = -3203886136035717074L;
 
