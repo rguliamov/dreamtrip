@@ -98,7 +98,7 @@ class GeographicServiceImplTest {
     }
 
     @Test
-    void testSearchStationsByCitySuccess () {
+    void testSearchStationsByCitySuccess() {
         StationCriteria criteria = new StationCriteria("Magnitogorsk");
 
         //получаем список городов со станциями
