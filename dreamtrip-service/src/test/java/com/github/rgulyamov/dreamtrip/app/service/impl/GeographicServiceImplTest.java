@@ -82,7 +82,7 @@ class GeographicServiceImplTest {
 
         Optional<City> answer1 = geographicService.findCityById(1);
         Optional<City> answer2 = geographicService.findCityById(2);
-        assertEquals(answer1.get().getName(), "Magnitogorsk");
+        assertEquals(answer1.get().getName(), "Magnitogorsk" );
         assertEquals(answer2.get().getName(), "Chelyabinsk");
     }
 
